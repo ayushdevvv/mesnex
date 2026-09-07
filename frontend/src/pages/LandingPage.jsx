@@ -3,8 +3,9 @@ import { useAuthStore } from "../store/useAuthStore";
 import { APP_NAME } from "../components/AppLogo";
 import { LandingNavbar } from "../components/landing/LandingNavbar";
 import { LandingHero } from "../components/landing/LandingHero";
-import { FeaturesSection } from "../components/landing/FeaturesSection";
-import { PreviewSection } from "../components/landing/PreviewSection";
+import { DesktopPreview } from "../components/landing/DesktopPreview";
+import { FeatureStrip } from "../components/landing/FeatureStrip";
+import { LandingFooter } from "../components/landing/LandingFooter";
 
 function LandingPage() {
   const authUser = useAuthStore((state) => state.authUser);
@@ -17,24 +18,20 @@ function LandingPage() {
   };
 
   return (
-    <div className="min-h-dvh w-full overflow-x-hidden bg-[#060a14] text-white">
-      <div
-        aria-hidden
-        className="pointer-events-none fixed -top-40 left-1/2 h-[42rem] w-[42rem] -translate-x-1/2 rounded-full bg-[#3d63dd]/20 blur-[140px]"
-      />
-
+    <div className="min-h-dvh w-full bg-[#05070c] text-white">
       <LandingNavbar isSignedIn={Boolean(authUser)} onGetStarted={handleGetStarted} />
 
       <LandingHero
-        appName={APP_NAME}
         isSignedIn={Boolean(authUser)}
         isCheckingAuth={isCheckingAuth}
         onGetStarted={handleGetStarted}
       />
 
-      <FeaturesSection />
+      <DesktopPreview appName={APP_NAME} />
 
-      <PreviewSection appName={APP_NAME} />
+      <FeatureStrip />
+
+      <LandingFooter />
     </div>
   );
 }
