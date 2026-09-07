@@ -23,7 +23,7 @@ export function AuthPreviewMockup() {
         </div>
 
         <div className="relative h-80">
-          {/* sign in state */}
+         
           <div className="mn-auth-signin absolute inset-0 flex flex-col items-center justify-center gap-4 px-10">
             <div className="flex size-11 items-center justify-center rounded-xl bg-[#151c2c] text-[15px] font-medium text-[#8fa8ff]">
               mN
@@ -33,7 +33,6 @@ export function AuthPreviewMockup() {
             <div className="h-10 w-full rounded-full bg-[#3d63dd]" />
           </div>
 
-          {/* chat state */}
           <div className="mn-auth-chat absolute inset-0 flex flex-col">
             <div className="flex items-center gap-2.5 border-b border-white/8 px-5 py-3.5">
               <div className="flex size-8 items-center justify-center rounded-full bg-[#151c2c] text-[11px] font-medium">
