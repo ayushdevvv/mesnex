@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router";
-import { useAuth } from "@clerk/react";
 import LandingPage from "../pages/LandingPage";
 import AuthPage from "../pages/AuthPage";
 import ChatPage from "../pages/ChatPage";
@@ -7,39 +6,24 @@ import PageLoader from "../components/PageLoader";
 import { useAuthStore } from "../store/useAuthStore";
 
 function AppRoutes() {
-  const { isSignedIn, isLoaded } = useAuth();
+  const authUser = useAuthStore((state) => state.authUser);
   const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
 
   return (
     <Routes>
-      {/* landing page always loads instantly, no auth wait */}
       <Route path="/" element={<LandingPage />} />
 
       <Route
         path="/auth"
         element={
-          !isLoaded ? (
-            <PageLoader />
-          ) : isSignedIn ? (
-            <Navigate to="/chat" replace />
-          ) : (
-            <AuthPage />
-          )
+          isCheckingAuth ? <PageLoader /> : authUser ? <Navigate to="/chat" replace /> : <AuthPage />
         }
       />
 
       <Route
         path="/chat"
         element={
-          !isLoaded ? (
-            <PageLoader />
-          ) : !isSignedIn ? (
-            <Navigate to="/auth" replace />
-          ) : isCheckingAuth ? (
-            <PageLoader />
-          ) : (
-            <ChatPage />
-          )
+          isCheckingAuth ? <PageLoader /> : !authUser ? <Navigate to="/auth" replace /> : <ChatPage />
         }
       />
     </Routes>

@@ -1,26 +1,25 @@
-import { getAuth } from "@clerk/express";
+import jwt from "jsonwebtoken";
 import { User } from "../models/auth/user.model.js";
 
 export async function authUser(req, res, next) {
   try {
-    const { userId } = getAuth(req);
+    const token = req.cookies.jwt;
 
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized" });
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized, no token" });
     }
 
-    const user = await User.findOne({ clerkId: userId });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.userId).select("-password");
 
     if (!user) {
-      return res.status(404).json({
-        message: "User profile is not synced yet",
-      });
+      return res.status(404).json({ message: "User not found" });
     }
 
     req.user = user;
     next();
   } catch (error) {
-    console.error("Error in protectRoute middleware:", error.message);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error in authUser middleware:", error.message);
+    res.status(401).json({ message: "Unauthorized, invalid token" });
   }
 }

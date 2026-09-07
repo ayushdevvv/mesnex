@@ -2,10 +2,9 @@ import { getInitials, useSelectedConversation } from "../../hooks/useSelectedCon
 import { useAuthStore } from "../../store/useAuthStore";
 import { useChatStore } from "../../store/useChatStore";
 import { APP_NAME, AppLogo } from "../AppLogo";
-import { UserButton } from "@clerk/react";
+import { LogOutIcon, MessageSquareIcon, UsersIcon } from "lucide-react";
 
-import { SearchField, Tabs } from "@heroui/react";
-import { MessageSquareIcon, UsersIcon } from "lucide-react";
+import { Button, SearchField, Tabs } from "@heroui/react";
 import { ConversationRow } from "./ConversationRow";
 
 function mapUserForList(user, onlineUsers) {
@@ -27,8 +26,6 @@ function mapUserForList(user, onlineUsers) {
 
 function ChatSidebar() {
   const conversations = useChatStore((state) => state.conversations);
-
-  console.log(conversations);
   const users = useChatStore((state) => state.users);
 
   const searchQuery = useChatStore((state) => state.searchQuery);
@@ -40,6 +37,8 @@ function ChatSidebar() {
   const setActiveConversationId = useChatStore((state) => state.setActiveConversationId);
 
   const onlineUsers = useAuthStore((state) => state.onlineUsers);
+  const authUser = useAuthStore((state) => state.authUser);
+  const logout = useAuthStore((state) => state.logout);
 
   const { activeConversationId, isLargeScreen } = useSelectedConversation();
 
@@ -70,13 +69,17 @@ function ChatSidebar() {
           <p className="flex-1 truncate text-lg font-bold tracking-tight sm:text-[22px]">
             {APP_NAME}
           </p>
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox: "size-8",
-              },
-            }}
-          />
+
+          <Button
+            variant="ghost"
+            size="sm"
+            isIconOnly
+            onPress={logout}
+            aria-label="Log out"
+            title={authUser?.fullName ? `Log out of ${authUser.fullName}` : "Log out"}
+          >
+            <LogOutIcon className="size-4.5" />
+          </Button>
         </div>
       </div>
 
@@ -115,10 +118,7 @@ function ChatSidebar() {
           </Tabs.List>
         </Tabs.ListContainer>
 
-        <Tabs.Panel
-          id="chats"
-          className="flex-1 overflow-x-hidden overflow-y-auto outline-none"
-        >
+        <Tabs.Panel id="chats" className="flex-1 overflow-x-hidden overflow-y-auto outline-none">
           {filteredConversations.length === 0 ? (
             <p className="px-4 py-6 text-center text-sm text-muted">
               No conversations match your search.
