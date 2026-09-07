@@ -4,14 +4,15 @@ import { AuthHeroPanel } from "../components/auth/AuthHeroPanel";
 
 function AuthPage() {
   return (
-    <div className="flex h-dvh w-full flex-col overflow-hidden bg-background text-foreground">
+    <div className="min-h-dvh w-full bg-background text-foreground md:h-dvh md:overflow-hidden">
       <AuthHeader />
 
-      <main className="relative flex flex-1 flex-col overflow-hidden md:flex-row">
+      <main className="relative flex min-h-[calc(100dvh-64px)] flex-col md:h-[calc(100dvh-64px)] md:flex-row">
         <AuthHeroPanel />
         <AuthActionPanel />
       </main>
     </div>
   );
 }
+
 export default AuthPage;
